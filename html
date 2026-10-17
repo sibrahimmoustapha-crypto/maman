@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkpoint - Algorithmes et Structures de Données</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f6f9;
+            color: #333;
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #1e293b;
+        }
+        .card {
+            background: #ffffff;
+            padding: 25px;
+            margin-bottom: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+        h2 {
+            color: #2563eb;
+            margin-top: 0;
+        }
+        button {
+            background-color: #2563eb;
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            font-size: 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #1d4ed8;
+        }
+        .result {
+            margin-top: 15px;
+            padding: 12px;
+            background-color: #f1f5f9;
+            border-left: 4px solid #2563eb;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Checkpoint : Algorithmes & Tableaux</h1>
+
+    <!-- Problème 1 -->
+    <div class="card">
+        <h2>Problème 1 : Somme des éléments distincts</h2>
+        <p>Calcule la somme de tous les éléments qui ne sont présents que dans l'un ou l'autre des deux ensembles.</p>
+        <p><strong>Ensemble 1 :</strong> [3, 1, 7, 9]</p>
+        <p><strong>Ensemble 2 :</strong> [2, 4, 1, 9, 3]</p>
+        <button onclick="resoudreProbleme1()">Calculer la somme</button>
+        <div id="resultat1" class="result">Cliquez sur le bouton pour afficher le résultat.</div>
+    </div>
+
+    <!-- Problème 2 -->
+    <div class="card">
+        <h2>Problème 2 : Produit scalaire & Orthogonalité</h2>
+        <p>Calcule le produit scalaire (dot product) de deux vecteurs et détermine s'ils sont orthogonaux.</p>
+        <p><strong>Vecteur V1 :</strong> [1, 2, 3]</p>
+        <p><strong>Vecteur V2 :</strong> [4, 5, 6]</p>
+        <p><strong>Vecteur V3 :</strong> [1, 0]</p>
+        <p><strong>Vecteur V4 :</strong> [0, 5]</p>
+        <button onclick="resoudreProbleme2()">Tester l'orthogonalité</button>
+        <div id="resultat2" class="result">Cliquez sur le bouton pour afficher le résultat.</div>
+    </div>
+
+    <script>
+        // ==========================================
+        // PROBLEME 1 : Somme des éléments distincts
+        // ==========================================
+        function sommeElementsDistincts(set1, set2) {
+            let somme = 0;
+            let elementsDistincts = [];
+
+            // 1. Parcourir set1 et vérifier si l'élément n'est PAS dans set2
+            for (let i = 0; i < set1.length; i++) {
+                let trouve = false;
+                for (let j = 0; j < set2.length; j++) {
+                    if (set1[i] === set2[j]) {
+                        trouve = true;
+                        break;
+                    }
+                }
+                if (!trouve) {
+                    somme += set1[i];
+                    elementsDistincts.push(set1[i]);
+                }
+            }
+
+            // 2. Parcourir set2 et vérifier si l'élément n'est PAS dans set1
+            for (let i = 0; i < set2.length; i++) {
+                let trouve = false;
+                for (let j = 0; j < set1.length; j++) {
+                    if (set2[i] === set1[j]) {
+                        trouve = true;
+                        break;
+                    }
+                }
+                if (!trouve) {
+                    somme += set2[i];
+                    elementsDistincts.push(set2[i]);
+                }
+            }
+
+            return { somme, elementsDistincts };
+        }
+
+        function resoudreProbleme1() {
+            let set1 = [3, 1, 7, 9];
+            let set2 = [2, 4, 1, 9, 3];
+            let res = sommeElementsDistincts(set1, set2);
+
+            document.getElementById('resultat1').innerHTML = 
+                `Éléments distincts : [${res.elementsDistincts.join(', ')}]<br>` +
+                `<strong>Somme finale = ${res.somme}</strong>`;
+        }
+
+
+        // ==========================================
+        // PROBLEME 2 : Produit scalaire & Orthogonalité
+        // ==========================================
+
+        // Version Fonction qui retourne le produit scalaire (dot product)
+        function dot_product(v1, v2) {
+            let ps = 0;
+            for (let i = 0; i < v1.length; i++) {
+                ps += v1[i] * v2[i];
+            }
+            return ps;
+        }
+
+        // Procédure pour tester l'orthogonalité
+        function testerOrthogonalite(v1, v2) {
+            if (v1.length !== v2.length) {
+                return "Les vecteurs doivent être de même dimension.";
+            }
+            let ps = dot_product(v1, v2);
+            if (ps === 0) {
+                return `Produit scalaire = ${ps} ➔ <strong>Les vecteurs sont orthogonaux.</strong>`;
+            } else {
+                return `Produit scalaire = ${ps} ➔ <strong>Les vecteurs NE sont PAS orthogonaux.</strong>`;
+            }
+        }
+
+        function resoudreProbleme2() {
+            let v1 = [1, 2, 3];
+            let v2 = [4, 5, 6];
+
+            let v3 = [1, 0];
+            let v4 = [0, 5];
+
+            let test1 = testerOrthogonalite(v1, v2);
+            let test2 = testerOrthogonalite(v3, v4);
+
+            document.getElementById('resultat2').innerHTML = 
+                `<strong>Couple 1 (V1, V2) :</strong> ${test1}<br><br>` +
+                `<strong>Couple 2 (V3, V4) :</strong> ${test2}`;
+        }
+    </script>
+
+</body>
+</html>
